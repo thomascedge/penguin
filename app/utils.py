@@ -8,7 +8,7 @@ import logging
 import json
 import os
 
-from .model import Reciept, Item
+from .model import Receipt, Item
 
 
 # get OpenAi API key from environment variable
@@ -46,22 +46,22 @@ class Utils():
         """
         return str(uuid4())
 
-    def calculate(self, reciept: Reciept) -> int:
+    def calculate(self, receipt: Receipt) -> int:
         """
-        Helper function used to calculate points from a reciept.
+        Helper function used to calculate points from a receipt.
         """
         self.points = 0
         self.message = 'Breakdown:'
 
         self.points = (
-            self._get_alpha(reciept.retailer) +
-            self._get_cents(reciept.total) +
-            self._get_multiple_of_25(reciept.total) +
-            self._get_every_two_items(reciept.items) +
-            self._get_trimmed_length(reciept.items) +
-            # self._get_llm(reciept) +
-            self._get_odd_date(reciept.purchase_date) + 
-            self._get_time_purchase(reciept.purchase_time)
+            self._get_alpha(receipt.retailer) +
+            self._get_cents(receipt.total) +
+            self._get_multiple_of_25(receipt.total) +
+            self._get_every_two_items(receipt.items) +
+            self._get_trimmed_length(receipt.items) +
+            # self._get_llm(receipt) +
+            self._get_odd_date(receipt.purchase_date) + 
+            self._get_time_purchase(receipt.purchase_time)
         )
 
         self.message += f"""\n\t+---------\n\t= {self.points} Points"""
@@ -104,7 +104,7 @@ class Utils():
     
     def _get_every_two_items(self, items: Item) -> int:
         """
-        Returns 5 points for every two items on the reciept
+        Returns 5 points for every two items on the receipt
         """
         # count number of items, // divide, return value
         num_of_items = len(items)
@@ -132,7 +132,7 @@ class Utils():
 
         return trim_points
     
-    def _get_llm(self, reciept: Reciept) -> None:
+    def _get_llm(self, receipt: Receipt) -> None:
         """
         Returns if and only if this program is generated using a large language 
         model, 5 points if the total is greater than 10.00.
@@ -146,7 +146,7 @@ class Utils():
             # genereate a response from 
             response = client.completions.create(
                 model='gpt-4o-mini',
-                prompt=f'Is the total greater than 10.00, yes or no? {reciept.model_dump()}'
+                prompt=f'Is the total greater than 10.00, yes or no? {receipt.model_dump()}'
             )
 
             # if response confirms value is less than 10, return 5

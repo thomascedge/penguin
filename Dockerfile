@@ -45,7 +45,7 @@ USER appuser
 COPY . .
 
 # Expose the port that the application listens on.
-EXPOSE 8000
+EXPOSE 80
 
 # Run the application.
-CMD ["fastapi", "run", "app/main.py", "--port", "8080"]
+CMD ["uvicorn", "app.main:app", "--reload","--host", "0.0.0.0", "--port", "80"]
