@@ -84,7 +84,7 @@ Breakdown:
 ## Build Instructions
 1. Ensure Docker is on your machine and running
 2. Use  `docker compose up --build` to build the container
-3. Test in the browser using `/docs` or an application of your choice (eg. Postman) 
+3. Test using the application of your choice (eg. Postman) 
 
 
 ## Summary of API Specification
