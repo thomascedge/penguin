@@ -4,38 +4,19 @@ from uuid import uuid4
 from openai import OpenAI
 from dotenv import load_dotenv
 
-import logging
-import json
 import os
 
 from .model import Receipt, Item
-
 
 # get OpenAi API key from environment variable
 load_dotenv()
 OPEN_API_KEY = os.getenv('OPENAI_API_KEY')
 
-class Logger():
+class Calculator():
     def __init__(self):
         """
-        Logger class for debugging 
-        """
-        self.logger
-
-    def start_debug(self, message: str) -> None:
-        #logger for debugging
-        logging.basicConfig(filename='api.log',
-                            format='%(asctime)s %(message)s',
-                            filemode='w')
-        
-        self.logger = logging.getLogger()
-        self.logger.setLevel(logging.DEBUG)
-        self.logger.debug(message)
-
-class Utils():
-    def __init__(self):
-        """
-        Utils class 
+        Utils class. Used primarily to calculate the number of points for a
+        given receipt.
         """
         self.points = None
         self.message = ''
@@ -66,8 +47,7 @@ class Utils():
 
         self.message += f"""\n\t+---------\n\t= {self.points} Points"""
         
-        return self.points
-
+        return self.points, self.message
 
     def _get_alpha(self, retailer: str) -> int:
         """
@@ -155,8 +135,8 @@ class Utils():
                 return 5
             return 0
         except Exception as e:
-            self.logger.error(f'An error occured in testing connecting to OpenAI API. The error is listed below:\n{e}')
-            return 0
+            self.message = f'An error occured in testing connecting to OpenAI API. The error is listed below:\n{e}'
+            return 0, self.message
 
     
     def _get_odd_date(self, date: str) -> int:
