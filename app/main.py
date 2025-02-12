@@ -1,10 +1,10 @@
 from fastapi import FastAPI, HTTPException
 
-from .utils import Utils, Logger
+from .utils import Calculator
 from .model import Receipt, Item
 
 app = FastAPI()
-util = Utils()
+calculator = Calculator()
 
 # Database kept in-memory. Stores a receipt id and its receipt
 receipts = {}
@@ -38,13 +38,22 @@ async def get_points(receipt: Receipt) -> None:
     A simple Getter endpoint that looks up the receipt by the ID and returns an object 
     specifying the points awarded.
 
+    NOTE: automatically raises a 422 error if any Receipt field is missing or wrong type
+
     { "points": 32 }
     """    
+    # error handeling in case no items in reciept
+    if len(receipt.items) == 0:
+        raise HTTPException(status_code=400, detail=f'Items list empty. Please ensure items are populated.')
+
     # create ID for receipt
-    receipt_id = util.create_id()
+    receipt_id = calculator.create_id()
     
     # calculate points and add to dictionary
-    points = util.calculate(receipt)
+    points, message = calculator.calculate(receipt)
     receipts[receipt_id] = points
+
+    # prints point calculation breakdown to terminal
+    print(message)
 
     return {'id': receipt_id}
