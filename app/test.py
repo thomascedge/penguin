@@ -1,6 +1,5 @@
-from .utils import Calculator
-
-from .model import Receipt, Item
+from utils import Calculator
+from model import Receipt, Item
 
 import pytest
 

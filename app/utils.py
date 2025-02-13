@@ -3,6 +3,9 @@ from math import ceil
 from uuid import uuid4
 from openai import OpenAI
 from dotenv import load_dotenv
+from typing import Annotated
+from fastapi import Depends
+from sqlmodel import Session, create_engine, select, SQLModel
 
 import os
 
@@ -11,6 +14,28 @@ from .model import Receipt, Item
 # get OpenAi API key from environment variable
 load_dotenv()
 OPEN_API_KEY = os.getenv('OPENAI_API_KEY')
+
+# class DatabaseCreator():
+#     def __init__(self, SQL_FILENAME):
+#         SQL_FILENAME = 'database.db'
+#         SQL_URL = f'sqlite:///{SQL_FILENAME}'
+
+#         connect_args = {'check_same_thread': False}
+#         engine = create_engine(SQL_URL, connect_args=connect_args)
+
+#         self.create_db_and_tables(engine)
+#         self.get_session(engine)
+
+#         SessionDep = Annotated[Session, Depends(self.get_session)]
+
+#     def create_db_and_tables(self, engine):
+#         SQLModel.model.create_all(engine)
+
+#     def get_session(self, engine):
+#         with Session(engine) as session:
+#             yield session
+
+    
 
 class Calculator():
     def __init__(self):

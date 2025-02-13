@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from sqlmodel import Field, SQLModel
 
 class Item(BaseModel):
     """
@@ -20,3 +21,10 @@ class Receipt(BaseModel):
     purchase_time: str = Field(..., alias='purchaseTime')
     items: list[Item]
     total: str
+
+class StoredData(SQLModel, table=True):
+    """
+    Relational database for data storage.
+    """
+    id: int = Field(default=None, primary_key=True)
+    points: int
