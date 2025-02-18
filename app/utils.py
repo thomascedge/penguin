@@ -2,40 +2,26 @@ from datetime import datetime
 from math import ceil
 from uuid import uuid4
 from openai import OpenAI
-from dotenv import load_dotenv
-from typing import Annotated
 from fastapi import Depends
-from sqlmodel import Session, create_engine, select, SQLModel
-
-import os
 
 from .model import Receipt, Item
+from .env import OPEN_API_KEY
 
-# get OpenAi API key from environment variable
-load_dotenv()
-OPEN_API_KEY = os.getenv('OPENAI_API_KEY')
+class IDGenerator():
+    def __init__(self):
+        pass
 
-# class DatabaseCreator():
-#     def __init__(self, SQL_FILENAME):
-#         SQL_FILENAME = 'database.db'
-#         SQL_URL = f'sqlite:///{SQL_FILENAME}'
-
-#         connect_args = {'check_same_thread': False}
-#         engine = create_engine(SQL_URL, connect_args=connect_args)
-
-#         self.create_db_and_tables(engine)
-#         self.get_session(engine)
-
-#         SessionDep = Annotated[Session, Depends(self.get_session)]
-
-#     def create_db_and_tables(self, engine):
-#         SQLModel.model.create_all(engine)
-
-#     def get_session(self, engine):
-#         with Session(engine) as session:
-#             yield session
-
+    def create_receipt_id(self):
+        """
+        Creates a string uuid for a receipt.
+        """
+        return str(uuid4())
     
+    def create_user_id(self) -> int:
+        """
+        Creates a uuid for an user.
+        """
+        return int(uuid4())
 
 class Calculator():
     def __init__(self):
@@ -45,12 +31,6 @@ class Calculator():
         """
         self.points = None
         self.message = ''
-
-    def create_id(self):
-        """
-        Creates a uuid for an individual receipt
-        """
-        return str(uuid4())
 
     def calculate(self, receipt: Receipt) -> int:
         """
@@ -184,4 +164,3 @@ class Calculator():
             self.message += f'\n\t10 Points - purchase after 2 and before 4'
             return 10
         return 0
-    
