@@ -129,17 +129,17 @@ Example Response:
 ## Development Notes
 ### `main.py`
 
-Serves as the layout for both endpoints and stores the data in-memory (more on this later). The first endpoints takes in a receipt id and returns the number of points for that id. If the id does not exist in memory, it will throw a 404 error, detailing the id cannot be found. The second endpoint posts a receipts data to the server. An id is generated for the receipt and points are calculated based on specs outlined by the instructions. The id and points are stored in memory and the receipt id returned by the function. If all fields in a receipt are not filled in, the client returns a 422 error. If the items list is empty, the client returns a 400 error detailing it needs to be populated.
+Serves as the layout for both endpoints and stores the data in-memory. The first endpoints takes in a receipt id and returns the number of points for that id. If the id does not exist in memory, it will throw a 404 error, detailing the id cannot be found. The second endpoint posts a receipts data to the server. An id is generated for the receipt and points are calculated based on specs outlined in the instructions. The id and points are stored in memory and the receipt id returned by the function. If all fields in a receipt are not filled in, the client returns a 422 error. If the items list is empty, the client returns a 400 error detailing it needs to be populated.
 
 ### `utils.py`
 
-`Calculator()` class contains methods for creating ids and calculating points for a receipt. It also includes a message variable that includes a breakdown of the calculation for a receipt.
+`Calculator()` class contains methods for creating ids and calculating points for a receipt. It also includes a message variable that details a breakdown of the calculation for a receipt.
 
 Calculation based on an LLM is included but not fully implemented as I had made too many calls to OpenAI.
 
 ### `model.py`
 
-Serves as a schema for a receipt and items. Lists fields for each model and aids in validation in case the server is sent data that breaks the schema.
+Serves as a schema for a receipt and items. It lists fields for each model and aids in validation in case the server is sent data that breaks the schema.
 
 ### `test.py`
 
