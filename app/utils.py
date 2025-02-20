@@ -13,13 +13,14 @@ load_dotenv()
 OPEN_API_KEY = os.getenv('OPENAI_API_KEY')
 
 class Calculator():
-    def __init__(self):
+    def __init__(self, user_multiplier):
         """
         Utils class. Used primarily to calculate the number of points for a
         given receipt.
         """
         self.points = None
         self.message = ''
+        self.user_multiplier = user_multiplier
 
     def create_id(self):
         """
@@ -35,7 +36,7 @@ class Calculator():
         self.message = 'Breakdown:'
 
         self.points = (
-            self._get_alpha(receipt.retailer) +
+            self._get_alpha(receipt.retailer, multiplier=self.user_multiplier) +
             self._get_cents(receipt.total) +
             self._get_multiple_of_25(receipt.total) +
             self._get_every_two_items(receipt.items) +
@@ -49,14 +50,14 @@ class Calculator():
         
         return self.points, self.message
 
-    def _get_alpha(self, retailer: str) -> int:
+    def _get_alpha(self, retailer: str, multiplier: int) -> int:
         """
         Returns points for every alphanumeric character in retailer name
         """
         alnum_points = 0
 
         for char in retailer:
-            if char.isalnum(): alnum_points += 1
+            if char.isalnum(): alnum_points += multiplier
 
         self.message += f'\n\t{alnum_points} Points - retailer name has {alnum_points} characters'
 

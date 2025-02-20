@@ -13,6 +13,7 @@ services:
       context: .
     ports:
       - 80:80
+    # command: -c "./app/main.py"
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
