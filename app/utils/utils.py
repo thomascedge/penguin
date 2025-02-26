@@ -2,18 +2,28 @@ from datetime import datetime
 from math import ceil
 from uuid import uuid4
 from openai import OpenAI
-from dotenv import load_dotenv
 
-import os
-
+from .env import OPEN_API_KEY
 from .model import Receipt, Item
 
-# get OpenAi API key from environment variable
-load_dotenv()
-OPEN_API_KEY = os.getenv('OPENAI_API_KEY')
+class IDGenerator():
+    def __init__(self):
+        pass
+
+    def create_receipt_id(self):
+        """
+        Creates a string uuid for a receipt.
+        """
+        return str(uuid4())
+    
+    def create_user_id(self) -> int:
+        """
+        Creates a uuid for an user.
+        """
+        return int(uuid4())
 
 class Calculator():
-    def __init__(self, user_multiplier):
+    def __init__(self, user_multiplier=1):
         """
         Utils class. Used primarily to calculate the number of points for a
         given receipt.
@@ -21,12 +31,6 @@ class Calculator():
         self.points = None
         self.message = ''
         self.user_multiplier = user_multiplier
-
-    def create_id(self):
-        """
-        Creates a uuid for an individual receipt
-        """
-        return str(uuid4())
 
     def calculate(self, receipt: Receipt) -> int:
         """
